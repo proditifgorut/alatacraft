@@ -54,36 +54,50 @@ function hideLoading() {
 }
 
 function generateMockData() {
+    const ecengCraftImages = [
+        'https://images.unsplash.com/photo-1589801258579-21c881ebb6ac?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1576722296633-5c74a3c3a4a7?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1618221313813-9d21626c7b13?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1561042138-89c5b8331a75?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1594735548698-76140543c8a7?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1605664041952-4a2855d966c2?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1552010099-5343844501a2?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1588789263210-db4c2c172e83?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1622484256447-1768b2184c8a?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1579586337278-35d19d18a531?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1611094454922-3e3c609b1d3c?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1621293299244-932f7b489b4e?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1542884748-2b87b36c3b9e?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1600585152220-094b9d7a6e2d?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1599493345842-c4e8f331649f?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1574169237599-2da9875b3ee8?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1590373654035-583d44a2c564?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1619852733495-28459a416a2a?w=400&h=400&fit=crop'
+    ];
+
     // Generate categories
-    const categoryNames = ['Keranjang', 'Dekorasi', 'Furniture', 'Aksesoris', 'Perlengkapan Rumah'];
+    const categoryNames = ['Keranjang', 'Dekorasi', 'Tas', 'Alas Makan', 'Topi'];
     const categoryImages = [
-        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1544967882-d2d6b2f6e18a?w=400&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?w=400&h=300&fit=crop'
+        'https://images.unsplash.com/photo-1588789263210-db4c2c172e83?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1542884748-2b87b36c3b9e?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1576722296633-5c74a3c3a4a7?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1594735548698-76140543c8a7?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1579586337278-35d19d18a531?w=400&h=300&fit=crop'
     ];
 
     state.categories = categoryNames.map((name, index) => ({
         id: index + 1,
         name,
-        slug: name.toLowerCase(),
+        slug: name.toLowerCase().replace(' ', ''),
         image: categoryImages[index],
         productCount: faker.number.int({ min: 15, max: 45 })
     }));
 
     // Generate products
-    const productCategories = ['keranjang', 'dekorasi', 'furniture', 'aksesoris', 'perlengkapan rumah'];
-    const productImages = [
-        'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1544967882-d2d6b2f6e18a?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1566501206188-5dd0cf160a0e?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop',
-        'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=400&fit=crop'
-    ];
-
+    const productCategories = ['keranjang', 'dekorasi', 'tas', 'alas makan', 'topi'];
+    
     state.products = Array.from({ length: 32 }, (_, index) => {
         const category = faker.helpers.arrayElement(productCategories);
         return {
@@ -92,12 +106,12 @@ function generateMockData() {
             description: generateProductDescription(),
             price: faker.number.int({ min: 50000, max: 500000 }),
             originalPrice: faker.number.int({ min: 60000, max: 600000 }),
-            image: faker.helpers.arrayElement(productImages),
-            images: Array.from({ length: 3 }, () => faker.helpers.arrayElement(productImages)),
+            image: faker.helpers.arrayElement(ecengCraftImages),
+            images: Array.from({ length: 3 }, () => faker.helpers.arrayElement(ecengCraftImages)),
             category,
             seller: {
                 name: faker.person.fullName(),
-                location: faker.location.city() + ', Indonesia',
+                location: 'Gorontalo, Indonesia',
                 rating: faker.number.float({ min: 4.0, max: 5.0, precision: 0.1 }),
                 totalSales: faker.number.int({ min: 10, max: 500 })
             },
@@ -114,11 +128,11 @@ function generateMockData() {
 
 function generateProductName(category) {
     const names = {
-        keranjang: ['Keranjang Eceng Gondok', 'Keranjang Anyaman', 'Keranjang Serbaguna', 'Keranjang Tradisional'],
-        dekorasi: ['Hiasan Dinding Eceng', 'Pot Bunga Anyaman', 'Lampion Eceng Gondok', 'Ornamen Tradisional'],
-        furniture: ['Kursi Anyaman Eceng', 'Meja Eceng Gondok', 'Rak Buku Anyaman', 'Sofa Eceng Tradisional'],
-        aksesoris: ['Tas Anyaman Eceng', 'Dompet Eceng Gondok', 'Gelang Anyaman', 'Kalung Tradisional'],
-        'perlengkapan rumah': ['Tempat Sampah Eceng', 'Rak Piring Anyaman', 'Tempat Tisu Eceng', 'Kotak Penyimpanan']
+        keranjang: ['Keranjang Eceng Bulat', 'Keranjang Anyaman Serbaguna', 'Keranjang Laundry Natural', 'Keranjang Tradisional Rapi'],
+        dekorasi: ['Hiasan Dinding Eceng Estetik', 'Pot Bunga Anyaman Gantung', 'Lampion Eceng Gondok Unik', 'Ornamen Meja Natural'],
+        tas: ['Tas Tote Anyaman Eceng', 'Tas Selempang Bulat', 'Clutch Pesta Eceng Gondok', 'Tas Belanja Ramah Lingkungan'],
+        'alas makan': ['Alas Piring Anyaman Rapi', 'Tatakan Gelas Eceng Gondok', 'Placemat Set Natural', 'Alas Meja Tahan Panas'],
+        topi: ['Topi Pantai Anyaman Lebar', 'Topi Fedora Eceng Gondok', 'Topi Koboi Natural', 'Topi Santai Unik']
     };
     
     return faker.helpers.arrayElement(names[category] || names.keranjang);
@@ -126,11 +140,11 @@ function generateProductName(category) {
 
 function generateProductDescription() {
     const descriptions = [
-        'Kerajinan tangan eceng gondok berkualitas tinggi dengan desain tradisional Indonesia. Ramah lingkungan dan tahan lama.',
-        'Produk anyaman eceng gondok asli dari pengrajin lokal. Dibuat dengan teknik tradisional turun temurun.',
-        'Kerajinan eceng gondok premium dengan finishing yang halus dan detail yang sempurna. Cocok untuk dekorasi rumah modern.',
-        'Anyaman eceng gondok berkualitas export dengan bahan pilihan. Proses pembuatan menggunakan metode tradisional.',
-        'Produk kerajinan eceng gondok unik dan artistik. Menggabungkan nilai budaya dengan fungsi praktis.'
+        'Dibuat dari tanaman eceng gondok pilihan dari Danau Limboto, kerajinan ini ramah lingkungan, unik, dan penuh dengan makna budaya Gorontalo.',
+        'Produk anyaman eceng gondok asli dari pengrajin lokal di sekitar Danau Limboto. Dibuat dengan teknik tradisional, menghasilkan produk yang kuat dan estetik.',
+        'Kerajinan premium dengan finishing halus, membawa sentuhan natural dan budaya Danau Limboto ke rumah Anda. Produk unik dan ramah lingkungan.',
+        'Anyaman eceng gondok berkualitas ekspor dari Danau Limboto. Proses pembuatan yang teliti memastikan setiap produk unik dan istimewa.',
+        'Produk kerajinan unik dan artistik. Menggabungkan nilai budaya Gorontalo dengan fungsi praktis untuk gaya hidup yang berkelanjutan dan ramah lingkungan.'
     ];
     
     return faker.helpers.arrayElement(descriptions);
@@ -299,7 +313,7 @@ function filterProducts(filter) {
     // Filter products
     let filteredProducts = state.products;
     if (filter !== 'all') {
-        filteredProducts = state.products.filter(product => product.category === filter);
+        filteredProducts = state.products.filter(product => product.category.toLowerCase().replace(' ', '') === filter);
     }
     
     renderProducts(filteredProducts.slice(0, 12));
@@ -744,7 +758,7 @@ function showPaymentSuccess() {
                     
                     <div class="bg-gray-50 rounded-lg p-4 mb-6">
                         <p class="text-sm text-gray-600 mb-2">Nomor Pesanan</p>
-                        <p class="font-mono font-bold text-lg">#NE${Date.now().toString().slice(-6)}</p>
+                        <p class="font-mono font-bold text-lg">#AC${Date.now().toString().slice(-6)}</p>
                     </div>
                     
                     <button class="w-full btn-primary" onclick="closeModal()">Kembali ke Beranda</button>

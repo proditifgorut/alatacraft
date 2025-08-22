@@ -3,7 +3,6 @@ import { faker } from '@faker-js/faker';
 document.addEventListener('DOMContentLoaded', () => {
     const authContainer = document.getElementById('auth-container');
     if (authContainer) {
-        // Check if there's an action in URL (e.g., from clicking "register")
         const urlParams = new URLSearchParams(window.location.search);
         const action = urlParams.get('action') || 'login';
         renderAuthForm(action);
@@ -51,7 +50,6 @@ function renderAuthForm(type = 'login') {
                     <select id="role" name="role" class="input-field">
                         <option value="pembeli">Pembeli</option>
                         <option value="pengrajin">Pengrajin</option>
-                        <option value="admin">Admin (Demo)</option>
                     </select>
                 </div>
             ` : ''}
@@ -70,6 +68,18 @@ function renderAuthForm(type = 'login') {
                 ${isLogin ? 'Masuk' : 'Daftar'}
             </button>
         </form>
+        
+        <div id="auth-error" class="text-red-500 text-sm text-center mt-4"></div>
+
+        ${isLogin ? `
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+                <p class="font-semibold text-center mb-1">Gunakan Akun Demo</p>
+                <ul class="list-disc list-inside">
+                    <li><b>Admin:</b> admin@admin.com / admin</li>
+                    <li><b>Pengrajin:</b> user@user.com / user</li>
+                </ul>
+            </div>
+        ` : ''}
         
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">
@@ -95,6 +105,8 @@ function handleAuth(type) {
     const form = document.getElementById('auth-form');
     const email = form.email.value;
     const password = form.password.value;
+    const errorElement = document.getElementById('auth-error');
+    errorElement.textContent = ''; // Clear previous errors
 
     if (type === 'register') {
         const name = form.name.value;
@@ -102,7 +114,7 @@ function handleAuth(type) {
         const confirmPassword = form['confirm-password'].value;
 
         if (password !== confirmPassword) {
-            alert('Password dan konfirmasi password tidak cocok!');
+            errorElement.textContent = 'Password dan konfirmasi password tidak cocok!';
             return;
         }
 
@@ -111,27 +123,39 @@ function handleAuth(type) {
             id: faker.string.uuid(),
             name,
             email,
-            role, // 'pembeli', 'pengrajin', 'admin'
+            role,
             avatar: faker.image.avatar(),
         };
         localStorage.setItem('loggedInUser', JSON.stringify(user));
         window.location.href = '/dashboard.html';
 
     } else { // Login
-        // Simulate successful login
-        // In a real app, you'd fetch user data based on email/password
-        const role = email.includes('admin') ? 'admin' : (email.includes('pengrajin') ? 'pengrajin' : 'pembeli');
-        const name = email.split('@')[0].replace('.', ' ').replace(/\d+/g, '').replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+        let user = null;
 
-        const user = {
-            id: faker.string.uuid(),
-            name: name || "Demo User",
-            email,
-            role,
-            avatar: faker.image.avatar(),
-        };
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-        window.location.href = '/dashboard.html';
+        if (email === 'admin@admin.com' && password === 'admin') {
+            user = {
+                id: faker.string.uuid(),
+                name: 'Admin Alatacraft',
+                email: 'admin@admin.com',
+                role: 'admin',
+                avatar: faker.image.avatar(),
+            };
+        } else if (email === 'user@user.com' && password === 'user') {
+            user = {
+                id: faker.string.uuid(),
+                name: 'Pengrajin Demo',
+                email: 'user@user.com',
+                role: 'pengrajin',
+                avatar: faker.image.avatar(),
+            };
+        }
+
+        if (user) {
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            window.location.href = '/dashboard.html';
+        } else {
+            errorElement.textContent = 'Email atau password salah. Silakan coba lagi.';
+        }
     }
 }
 
